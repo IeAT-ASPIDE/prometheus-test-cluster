@@ -79,8 +79,6 @@ ff02::2 ip6-allrouters
 EOF
 SCRIPT
 
-SCRIPT
-
 $hosts_script = <<SCRIPT
 apt-get update
 apt-get install wget -y
