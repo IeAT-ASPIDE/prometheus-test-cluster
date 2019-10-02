@@ -104,7 +104,7 @@ tar -xvzf node_exporter-0.18.1.linux-amd64.tar.gz
 # Start service of node_exporter
 # sudo service node_exporter start
 
-cd /opt/node_exporter/node_exporter-0.18.1.linux-amd64/
+cd /opt/node_exporter-0.18.1.linux-amd64/
 
 nohup ./node_exporter > exporter.log 2>&1 &
 
