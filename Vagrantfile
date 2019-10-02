@@ -92,19 +92,21 @@ wget https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_
 tar -xvzf node_exporter-0.18.1.linux-amd64.tar.gz
 
 # create a symbolic link of node_exporter
-sudo ln -s /opt/node_exporter/node_exporter-0.18.1.linux-amd64/node_exporter /usr/bin/node_exporter
+# sudo ln -s /opt/node_exporter/node_exporter-0.18.1.linux-amd64/node_exporter /usr/bin
 
 # Edit node_exporter configuration file and add configuration so that it will automatically start in next boot
-cat <<EOF > /etc/init/node_exporter.conf
-# Run node_exporter-0.14.0.linux-amd64
-start on startup
-script
-   /usr/bin/node_exporter
-end script
-EOF
-
+# cat <<EOF > /etc/init/node_exporter.conf
+# start on startup
+# script
+#    /usr/bin/node_exporter
+# end script
+# EOF
 # Start service of node_exporter
-sudo service node_exporter start
+# sudo service node_exporter start
+
+cd /opt/node_exporter/node_exporter-0.18.1.linux-amd64/
+
+nohup ./node_exporter > exporter.log 2>&1 &
 
 #Set Swappiness value to 10 instead of 60
 sysctl -w vm.swappiness=10
