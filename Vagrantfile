@@ -26,8 +26,8 @@ apt-get install screen -y
 
 cd /opt
 wget https://github.com/prometheus/prometheus/releases/download/v2.13.0-rc.0/prometheus-2.13.0-rc.0.linux-amd64.tar.gz
-tar -xzvf prometheus-1.6.2.linux-amd64.tar.gz
-cd prometheus-1.6.2.linux-amd64
+tar -xzvf prometheus-2.13.0-rc.0.linux-amd64
+cd prometheus-2.13.0-rc.0.linux-amd64
 
 cat <<EOF > prometheus.yml
 global:
@@ -51,7 +51,7 @@ nohup ./prometheus > prometheus.log 2>&1 &
 cd /opt
 
 # Download grafana
-wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana_4.2.0_amd64.deb -O /home/vagrant/Downloads/grafana_4.2.0_amd64.deb
+wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana_4.2.0_amd64.deb -O /opt/grafana_4.2.0_amd64.deb
 
 sudo apt-get install -y adduser libfontconfig
 
