@@ -31,7 +31,7 @@ cd prometheus-2.13.0-rc.0.linux-amd64
 
 cat <<EOF > prometheus.yml
 global:
-  scrape_interval:     15s # By default, scrape targets every 15 seconds.
+  scrape_interval:     1s # By default, scrape targets every 15 seconds.
   # Attach these labels to any time series or alerts when communicating with
   # external systems (federation, remote storage, Alertmanager).
   external_labels:
@@ -92,7 +92,7 @@ wget https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_
 tar -xvzf node_exporter-0.18.1.linux-amd64.tar.gz
 
 # create a symbolic link of node_exporter
-sudo ln -s /opt/node_exporter/node_exporter-0.18.1.linux-amd64/node_exporter /usr/bin
+sudo ln -s /opt/node_exporter/node_exporter-0.18.1.linux-amd64/node_exporter /usr/bin/node_exporter
 
 # Edit node_exporter configuration file and add configuration so that it will automatically start in next boot
 cat <<EOF > /etc/init/node_exporter.conf
