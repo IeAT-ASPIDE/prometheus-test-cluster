@@ -24,12 +24,13 @@ apt-get update
 apt-get install screen -y
 # apt-get install wget -y
 
+sudo chown vagrant -R /opt
 cd /opt
 wget https://github.com/prometheus/prometheus/releases/download/v2.13.0-rc.0/prometheus-2.13.0-rc.0.linux-amd64.tar.gz
 tar -xzvf prometheus-2.13.0-rc.0.linux-amd64
-cd prometheus-2.13.0-rc.0.linux-amd64
+cd /opt/prometheus-2.13.0-rc.0.linux-amd64
 
-cat <<EOF > prometheus.yml
+cat <<EOF > /opt/prometheus-2.13.0-rc.0.linux-amd64/prometheus.yml
 global:
   scrape_interval:     1s # By default, scrape targets every 15 seconds.
   # Attach these labels to any time series or alerts when communicating with
@@ -45,7 +46,7 @@ scrape_configs:
       - targets: ['10.211.55.101:9100', '10.211.55.102:9100', '10.211.55.103:9100']
 EOF
 
-# tart prometheus
+# Start prometheus
 nohup ./prometheus > prometheus.log 2>&1 &
 
 cd /opt
@@ -84,7 +85,7 @@ apt-get update
 apt-get install wget -y
 apt-get install collectd
 
-
+sudo chown vagrant -R /opt
 cd /opt
 wget https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_exporter-0.18.1.linux-amd64.tar.gz
 
