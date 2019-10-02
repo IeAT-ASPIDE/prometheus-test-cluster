@@ -27,8 +27,7 @@ apt-get install screen -y
 sudo chown vagrant -R /opt
 cd /opt
 wget https://github.com/prometheus/prometheus/releases/download/v2.13.0-rc.0/prometheus-2.13.0-rc.0.linux-amd64.tar.gz
-tar -xzvf prometheus-2.13.0-rc.0.linux-amd64
-cd /opt/prometheus-2.13.0-rc.0.linux-amd64
+tar -xzvf prometheus-2.13.0-rc.0.linux-amd64.tar.gz && cd /opt/prometheus-2.13.0-rc.0.linux-amd64
 
 cat <<EOF > /opt/prometheus-2.13.0-rc.0.linux-amd64/prometheus.yml
 global:
@@ -45,7 +44,7 @@ scrape_configs:
     static_configs:
       - targets: ['10.211.55.101:9100', '10.211.55.102:9100', '10.211.55.103:9100']
 EOF
-
+cd /opt/prometheus-2.13.0-rc.0.linux-amd64
 # Start prometheus
 nohup ./prometheus > prometheus.log 2>&1 &
 
