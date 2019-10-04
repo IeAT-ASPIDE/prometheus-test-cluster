@@ -24,7 +24,7 @@ apt-get update
 apt-get install screen -y
 # apt-get install wget -y
 
-sudo chown vagrant -R /opt
+sudo chown vagrant:vagrant -R /opt
 cd /opt
 wget https://github.com/prometheus/prometheus/releases/download/v2.13.0-rc.0/prometheus-2.13.0-rc.0.linux-amd64.tar.gz
 tar -xzvf prometheus-2.13.0-rc.0.linux-amd64.tar.gz && cd /opt/prometheus-2.13.0-rc.0.linux-amd64
@@ -84,7 +84,7 @@ apt-get update
 apt-get install wget -y
 apt-get install collectd
 
-sudo chown vagrant -R /opt
+sudo chown vagrant:vagrant -R /opt
 cd /opt
 wget https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_exporter-0.18.1.linux-amd64.tar.gz
 
@@ -104,9 +104,16 @@ tar -xvzf node_exporter-0.18.1.linux-amd64.tar.gz
 # Start service of node_exporter
 # sudo service node_exporter start
 
-cd /opt/node_exporter-0.18.1.linux-amd64/
+#cd /opt/node_exporter-0.18.1.linux-amd64/
 
-nohup ./node_exporter > exporter.log 2>&1 &
+#nohup ./node_exporter > exporter.log 2>&1 &
+
+# Register node_exporter as service
+sudo mkdir usr/lib/systemd/system
+sudo cp /vagrant/node_exporter.service /usr/lib/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable node_exporter.service
+sudo service node_exporter start  
 
 #Set Swappiness value to 10 instead of 60
 sysctl -w vm.swappiness=10

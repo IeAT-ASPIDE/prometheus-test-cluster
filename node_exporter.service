@@ -1,0 +1,18 @@
+[Unit]
+Description=Node Exporter
+
+[Service]
+Type=simple
+PIDFile=/run/node_exporter.pid
+# Step 1 and Step 2 details are here..
+# ------------------------------------
+ExecStart=/opt/node_exporter-0.18.1.linux-amd64/node_exporter
+User=vagrant
+Group=vagrant
+WorkingDirectory=/opt/node_exporter-0.18.1.linux-amd64/
+Restart=always
+RestartSec=10
+#KillMode=mixed
+
+[Install]
+WantedBy=multi-user.target

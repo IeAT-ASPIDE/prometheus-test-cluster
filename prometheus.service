@@ -1,0 +1,18 @@
+[Unit]
+Description=prometheus
+
+[Service]
+Type=simple
+PIDFile=/run/prometheus.pid
+# Step 1 and Step 2 details are here..
+# ------------------------------------
+ExecStart=/opt/prometheus-2.13.0-rc.0.linux-amd64/prometheus/
+User=vagrant
+Group=vagrant
+WorkingDirectory=/opt/prometheus-2.13.0-rc.0.linux-amd64/prometheus/
+Restart=always
+RestartSec=10
+#KillMode=mixed
+
+[Install]
+WantedBy=multi-user.target
