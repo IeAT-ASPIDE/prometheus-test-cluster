@@ -26,7 +26,7 @@ export LC_CTYPE="en_US.UTF-8"
 apt-get update
 apt-get install screen -y
 # apt-get install wget -y
-# apt-get install python3.6 -y
+apt-get install python3.6 -y
 
 sudo chown vagrant:vagrant -R /opt
 cd /opt
@@ -39,7 +39,7 @@ global:
   # Attach these labels to any time series or alerts when communicating with
   # external systems (federation, remote storage, Alertmanager).
   external_labels:
-    monitor: 'codelab-monitor'
+    monitor: 'aspide-monitor'
 # A scrape configuration containing exactly one endpoint to scrape:
 # Here it's Prometheus itself.
 scrape_configs:
@@ -68,6 +68,16 @@ sudo service grafana-server start
 # Run on every boot
 sudo update-rc.d grafana-server defaults
 
+# Install dependancies
+pip3 install dask[complete]
+pip3 install dask distributed --upgrade
+pip3 install dask-ml[complete] 
+pip3 install bokeh
+pip3 install pandas
+
+# Start dask-schedueler
+nohup dask-scheduler --host 0.0.0.0 --port 8786 > dask_schedueler.log 2>&1 &
+
 # Set Swappiness value to 10 instead of 60
 sysctl -w vm.swappiness=10
 cat /proc/sys/vm/swappiness
@@ -90,7 +100,7 @@ export LC_CTYPE="en_US.UTF-8"
 apt-get update
 apt-get install wget -y
 apt-get install collectd -y
-# apt-get install python3-pip -y
+apt-get install python3-pip -y
 
 sudo chown vagrant:vagrant -R /opt
 cd /opt
@@ -125,11 +135,14 @@ sudo service node_exporter start
 
 
 # Install dependancies
-# pip3 install dask[complete]
-# pip3 install dask distributed --upgrade
-# pip3 install dask-ml[complete] 
-# pip3 install bokeh
-# pip3 install pandas
+pip3 install dask[complete]
+pip3 install dask distributed --upgrade
+pip3 install dask-ml[complete] 
+pip3 install bokeh
+pip3 install pandas
+
+# Start dask-worker
+nohup dask-worker 10.211.55.100:8786 > dask-worker.log 2>&1 &
 
 #Set Swappiness value to 10 instead of 60
 sysctl -w vm.swappiness=10
@@ -179,6 +192,7 @@ Vagrant.configure("2") do |config|
     master.vm.hostname = "prometheus"
     master.vm.network :forwarded_port, host:9090, guest: 9090
     master.vm.network :forwarded_port, host:3000, guest: 3000
+    master.vm.network :forwarded_port, host:8787, guest:8787
     master.vm.network :forwarded_port, guest: 22, host: 2185
     master.vm.provision :hostmanager
     master.vm.provision :shell, :inline => $master_script
