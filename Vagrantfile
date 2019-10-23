@@ -20,9 +20,13 @@
 
 $master_script = <<SCRIPT
 #!/bin/bash
+export LC_ALL="en_US.UTF-8"
+export LC_CTYPE="en_US.UTF-8"
+add-apt-repository ppa:jonathonf/python-3.6 -y
 apt-get update
 apt-get install screen -y
 # apt-get install wget -y
+# apt-get install python3.6 -y
 
 sudo chown vagrant:vagrant -R /opt
 cd /opt
@@ -80,9 +84,13 @@ EOF
 SCRIPT
 
 $hosts_script = <<SCRIPT
+#!/bin/bash
+export LC_ALL="en_US.UTF-8"
+export LC_CTYPE="en_US.UTF-8"
 apt-get update
 apt-get install wget -y
-apt-get install collectd
+apt-get install collectd -y
+# apt-get install python3-pip -y
 
 sudo chown vagrant:vagrant -R /opt
 cd /opt
@@ -114,6 +122,14 @@ sudo cp /vagrant/node_exporter.service /usr/lib/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable node_exporter.service
 sudo service node_exporter start  
+
+
+# Install dependancies
+# pip3 install dask[complete]
+# pip3 install dask distributed --upgrade
+# pip3 install dask-ml[complete] 
+# pip3 install bokeh
+# pip3 install pandas
 
 #Set Swappiness value to 10 instead of 60
 sysctl -w vm.swappiness=10
