@@ -26,7 +26,7 @@ export LC_CTYPE="en_US.UTF-8"
 apt-get update
 apt-get install screen -y
 # apt-get install wget -y
-apt-get install python3.6 -y
+apt-get install python3-pip -y
 
 sudo chown vagrant:vagrant -R /opt
 cd /opt
