@@ -149,7 +149,7 @@ SCRIPT
 Vagrant.configure("2") do |config|
 
   # Define base image
-  config.vm.box = "ubuntu/xenial64"
+  config.vm.box = "ubuntu/bionic64"
   #config.vm.box_url = "http://files.vagrantup.com/precise64.box"
 
   # Manage /etc/hosts on host and VMs
