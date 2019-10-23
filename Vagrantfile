@@ -22,7 +22,7 @@ $master_script = <<SCRIPT
 #!/bin/bash
 export LC_ALL="en_US.UTF-8"
 export LC_CTYPE="en_US.UTF-8"
-add-apt-repository ppa:jonathonf/python-3.6 -y
+# add-apt-repository ppa:jonathonf/python-3.6 -y
 apt-get update
 apt-get install screen -y
 # apt-get install wget -y
