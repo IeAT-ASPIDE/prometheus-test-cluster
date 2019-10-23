@@ -203,7 +203,7 @@ Vagrant.configure("2") do |config|
     slave1.vm.box = "ubuntu/bionic64"
     slave1.vm.provider :virtualbox do |v|
       v.name = "node1"
-      v.customize ["modifyvm", :id, "--memory", "2048"]
+      v.customize ["modifyvm", :id, "--memory", "4096"]
     end
     slave1.vm.network :private_network, ip: "10.211.55.101"
     slave1.vm.hostname = "node1"
@@ -216,7 +216,7 @@ Vagrant.configure("2") do |config|
     slave2.vm.box = "ubuntu/bionic64"
     slave2.vm.provider :virtualbox do |v|
       v.name = "node2"
-      v.customize ["modifyvm", :id, "--memory", "2048"]
+      v.customize ["modifyvm", :id, "--memory", "4096"]
     end
     slave2.vm.network :private_network, ip: "10.211.55.102"
     slave2.vm.hostname = "node2"
@@ -229,7 +229,7 @@ Vagrant.configure("2") do |config|
     slave3.vm.box = "ubuntu/bionic64"
     slave3.vm.provider :virtualbox do |v|
       v.name = "node3"
-      v.customize ["modifyvm", :id, "--memory", "2048"]
+      v.customize ["modifyvm", :id, "--memory", "4096"]
     end
     slave3.vm.network :private_network, ip: "10.211.55.103"
     slave3.vm.hostname = "node3"
