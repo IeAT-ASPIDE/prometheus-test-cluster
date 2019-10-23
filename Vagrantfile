@@ -193,6 +193,7 @@ Vagrant.configure("2") do |config|
     master.vm.network :forwarded_port, host:9090, guest: 9090
     master.vm.network :forwarded_port, host:3000, guest: 3000
     master.vm.network :forwarded_port, host:8787, guest:8787
+    master.vm.network :forwarded_port, host:8786, guest:8786
     master.vm.network :forwarded_port, guest: 22, host: 2185
     master.vm.provision :hostmanager
     master.vm.provision :shell, :inline => $master_script
