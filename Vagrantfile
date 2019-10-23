@@ -117,7 +117,7 @@ tar -xvzf node_exporter-0.18.1.linux-amd64.tar.gz
 #nohup ./node_exporter > exporter.log 2>&1 &
 
 # Register node_exporter as service
-sudo mkdir usr/lib/systemd/system
+sudo mkdir /usr/lib/systemd/system
 sudo cp /vagrant/node_exporter.service /usr/lib/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable node_exporter.service
