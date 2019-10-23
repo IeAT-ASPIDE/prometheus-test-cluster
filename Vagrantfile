@@ -70,6 +70,7 @@ sudo update-rc.d grafana-server defaults
 
 # Install dependancies
 pip3 install numpy==1.16
+pip3 install scikit-learn==0.20.0
 pip3 install dask[complete]
 pip3 install dask distributed --upgrade
 pip3 install dask-ml[complete] 
@@ -138,6 +139,7 @@ sudo service node_exporter start
 
 # Install dependancies
 pip3 install numpy==1.16
+pip3 install scikit-learn==0.20.0
 pip3 install dask[complete]
 pip3 install dask distributed --upgrade
 pip3 install dask-ml[complete] 
