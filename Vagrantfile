@@ -74,6 +74,7 @@ pip3 install dask distributed --upgrade
 pip3 install dask-ml[complete] 
 pip3 install bokeh
 pip3 install pandas
+pip3 install numpy==1.16
 
 # Start dask-schedueler
 nohup dask-scheduler --host 0.0.0.0 --port 8786 > dask_schedueler.log 2>&1 &
@@ -140,6 +141,7 @@ pip3 install dask distributed --upgrade
 pip3 install dask-ml[complete] 
 pip3 install bokeh
 pip3 install pandas
+pip3 install numpy==1.16
 
 # Start dask-worker
 nohup dask-worker 10.211.55.100:8786 > dask-worker.log 2>&1 &
