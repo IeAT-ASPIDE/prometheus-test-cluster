@@ -170,6 +170,24 @@ ff02::2 ip6-allrouters
 EOF
 SCRIPT
 
+$spark_master_script = <<SCRIPT
+#!/bin/bash
+cd /usr/local/spark/sbin
+
+# Start Spark Master
+sudo ./start_master.sh -h 10.211.55.100
+
+SCRIPT
+
+$spark_slave_script = <<SCRIPT
+#!/bin/bash
+
+cd /usr/local/spark/sbin
+
+# Start Spark Master
+sudo ./start_slave.sh spark://10.211.55.100:7077
+
+SCRIPT
 
 Vagrant.configure("2") do |config|
 
@@ -212,9 +230,10 @@ Vagrant.configure("2") do |config|
     master.vm.network :forwarded_port, guest: 7070, host: 7070
     master.vm.network :forwarded_port, guest: 4040, host: 4040
     master.vm.network :forwarded_port, guest: 18080, host: 18080
-    master.vm.provision :hostmanager
     master.vm.provision :shell, :inline => $master_script
     master.vm.provision :shell, path: "provision_script.sh"
+    master.vm.provision :shell, :inline => $spark_master_script
+    master.vm.provision :hostmanager
   end
 
   config.vm.define :slave1 do |slave1|
@@ -232,6 +251,7 @@ Vagrant.configure("2") do |config|
     slave1.vm.network :forwarded_port, guest: 18080, host: 18081
     slave1.vm.provision :shell, :inline => $hosts_script
     slave1.vm.provision :shell, path: "provision_script.sh"
+    slave1.vm.provision :shell, :inline => $spark_slave_script
     slave1.vm.provision :hostmanager
   end
 
@@ -250,6 +270,7 @@ Vagrant.configure("2") do |config|
     slave2.vm.network :forwarded_port, guest: 18080, host: 18082
     slave2.vm.provision :shell, :inline => $hosts_script
     slave2.vm.provision :shell, path: "provision_script.sh"
+    slave2.vm.provision :shell, :inline => $spark_slave_script
     slave2.vm.provision :hostmanager
   end
 
@@ -268,6 +289,7 @@ Vagrant.configure("2") do |config|
     slave3.vm.network :forwarded_port, guest: 18080, host: 18083
     slave3.vm.provision :shell, :inline => $hosts_script
     slave3.vm.provision :shell, path: "provision_script.sh"
+    slave3.vm.provision :shell, :inline => $spark_slave_script
     slave3.vm.provision :hostmanager
   end
 
