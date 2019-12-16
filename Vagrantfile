@@ -273,7 +273,6 @@ cp /vagrant/kernels/pyspark.json /opt/conda/share/jupyter/kernels/pyspark/kernel
 
 # fix permisions
 chown -R vagrant:vagrant /opt/*
-
 EOF
 SCRIPT
 
