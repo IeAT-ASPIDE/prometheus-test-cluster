@@ -98,6 +98,7 @@ ff02::2 ip6-allrouters
 EOF
 SCRIPT
 
+
 $hosts_script = <<SCRIPT
 #!/bin/bash
 export LC_ALL="en_US.UTF-8"
@@ -169,6 +170,113 @@ ff02::2 ip6-allrouters
 EOF
 SCRIPT
 
+$provision_script = <<SCRIPT
+# Configure environment
+export CONDA_DIR=/opt/conda
+export PATH=$CONDA_DIR/bin:$PATH
+export SHELL=/bin/bash
+export DEBIAN_FRONTEND=noninteractive
+
+# Install dependencies
+apt-get update
+apt-get install -yq --no-install-recommends \
+git \
+vim \
+wget \
+build-essential \
+python-dev \
+ca-certificates \
+bzip2 \
+unzip \
+libsm6 \
+pandoc \
+texlive-latex-base \
+texlive-latex-extra \
+texlive-fonts-extra \
+texlive-fonts-recommended \
+openjdk-8-jre-headless
+
+apt-get clean
+
+# Install conda
+mkdir -p $CONDA_DIR
+echo export PATH=$CONDA_DIR/bin:'$PATH' > /etc/profile.d/conda.sh
+wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+chmod +x Miniconda3-latest-Linux-x86_64.sh
+/bin/bash Miniconda3-latest-Linux-x86_64.sh -f -b -p $CONDA_DIR
+rm Miniconda3-latest-Linux-x86_64.sh
+$CONDA_DIR/bin/conda install --yes conda==4.3.21
+
+
+# Install Jupyter notebook
+conda install --yes 'notebook=5.0*' terminado
+conda clean -yt
+
+#Create Jupyter working folders
+mkdir /root/work
+mkdir /root/.jupyter
+mkdir /root/.local
+
+# Spark dependencies
+export APACHE_SPARK_VERSION=2.1.1
+apt-get -y update
+apt-get install -y --no-install-recommends openjdk-7-jre-headless
+apt-get clean
+echo 'Downloading Spark. Hold tight..'
+wget -qO - http://d3kbcqa49mib13.cloudfront.net/spark-${APACHE_SPARK_VERSION}-bin-hadoop2.7.tgz | tar -xz -C /usr/local/
+cd /usr/local
+ln -s spark-${APACHE_SPARK_VERSION}-bin-hadoop2.7 spark
+
+# Scala Spark kernel (build and cleanup)
+
+#cd /tmp
+#echo 'deb http://dl.bintray.com/sbt/debian /' > /etc/apt/sources.list.d/sbt.list
+#apt-get update
+#apt-get install -yq --force-yes --no-install-recommends sbt
+##cd spark-kernel
+#sbt compile -Xms1024M -Xmx2048M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=1024M
+#sbt pack
+##mv kernel/target/pack /opt/sparkkernel
+##chmod +x /opt/sparkkernel
+#rm -rf ~/.ivy2
+#rm -rf ~/.sbt
+##rm -rf /tmp/spark-kernel
+#apt-get remove -y sbt
+
+apt-get clean
+# Spark env
+export SPARK_HOME=/usr/local/spark
+# TO BE CHECK ONCE INSTALLED
+export PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.4-src.zip
+
+# Install Python packages
+conda install --yes 'ipython' 'ipywidgets' 'pandas' 'matplotlib' 'scipy' 'seaborn' 'scikit-learn' 'pyspark' 'py4j' pyzmq
+conda clean -yt
+
+# Scala Spark and Pyspark kernels
+mkdir -p /opt/conda/share/jupyter/kernels/scala
+mkdir -p /opt/conda/share/jupyter/kernels/pyspark
+
+cp /vagrant/kernels/scala.json /opt/conda/share/jupyter/kernels/scala/kernel.json
+cp /vagrant/kernels/pyspark.json /opt/conda/share/jupyter/kernels/pyspark/kernel.json
+
+#Jupyter added in logon script rc.local (executed before login as root)
+# echo ' Setting up local rc path'
+
+# echo '#!/bin/sh -e' > /etc/rc.local
+# echo 'export CONDA_DIR=/opt/conda' >> /etc/rc.local
+# echo 'export PATH=$CONDA_DIR/bin:$PATH' >> /etc/rc.local
+# echo 'export SPARK_HOME=/usr/local/spark' >> /etc/rc.local
+# echo 'export PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.4-src.zip' >> /etc/rc.local
+# echo "jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --notebook-dir='/home/vagrant' & " >> /etc/rc.local
+# echo 'exit 0' >> /etc/rc.local
+
+# fix permisions
+chown -R vagrant:vagrant /opt/*
+
+EOF
+SCRIPT
+
 Vagrant.configure("2") do |config|
 
   # Define base image
@@ -205,8 +313,14 @@ Vagrant.configure("2") do |config|
     master.vm.network :forwarded_port, host:8787, guest:8787
     master.vm.network :forwarded_port, host:8786, guest:8786
     master.vm.network :forwarded_port, guest: 22, host: 2185
+    master.vm.network :forwarded_port, guest: 8888, host: 8897
+    master.vm.network :forwarded_port, guest: 8080, host: 8081
+    master.vm.network :forwarded_port, guest: 7070, host: 7070
+    master.vm.network :forwarded_port, guest: 4040, host: 4040
+    master.vm.network :forwarded_port, guest: 18080, host: 18080
     master.vm.provision :hostmanager
     master.vm.provision :shell, :inline => $master_script
+    master.vm.provision :shell, :inline => $provision_script
   end
 
   config.vm.define :slave1 do |slave1|
@@ -218,7 +332,12 @@ Vagrant.configure("2") do |config|
     slave1.vm.network :private_network, ip: "10.211.55.101"
     slave1.vm.hostname = "node1"
     slave1.vm.network :forwarded_port, guest: 22, host: 2186
+    slave1.vm.network :forwarded_port, guest: 8080, host: 8082
+    slave1.vm.network :forwarded_port, guest: 7070, host: 7071
+    slave1.vm.network :forwarded_port, guest: 4040, host: 4041
+    slave1.vm.network :forwarded_port, guest: 18080, host: 18081
     slave1.vm.provision :shell, :inline => $hosts_script
+    slave1.vm.provision :shell, :inline => $provision_script
     slave1.vm.provision :hostmanager
   end
 
@@ -231,7 +350,12 @@ Vagrant.configure("2") do |config|
     slave2.vm.network :private_network, ip: "10.211.55.102"
     slave2.vm.hostname = "node2"
     slave2.vm.network :forwarded_port, guest: 22, host: 2187
+    slave2.vm.network :forwarded_port, guest: 8080, host: 8083
+    slave2.vm.network :forwarded_port, guest: 7070, host: 7072
+    slave2.vm.network :forwarded_port, guest: 4040, host: 4042
+    slave2.vm.network :forwarded_port, guest: 18080, host: 18082
     slave2.vm.provision :shell, :inline => $hosts_script
+    slave2.vm.provision :shell, :inline => $provision_script
     slave2.vm.provision :hostmanager
   end
 
@@ -244,7 +368,12 @@ Vagrant.configure("2") do |config|
     slave3.vm.network :private_network, ip: "10.211.55.103"
     slave3.vm.hostname = "node3"
     slave3.vm.network :forwarded_port, guest: 22, host: 2188
+    slave3.vm.network :forwarded_port, guest: 8080, host: 8084
+    slave3.vm.network :forwarded_port, guest: 7070, host: 7073
+    slave3.vm.network :forwarded_port, guest: 4040, host: 4043
+    slave3.vm.network :forwarded_port, guest: 18080, host: 18083
     slave3.vm.provision :shell, :inline => $hosts_script
+    slave3.vm.provision :shell, :inline => $provision_script
     slave3.vm.provision :hostmanager
   end
 
