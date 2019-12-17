@@ -175,7 +175,7 @@ $spark_master_script = <<SCRIPT
 
 
 # Start Spark Master
-cd /usr/local/spark/sbin/ && ls -l && ./start_master.sh -h 10.211.55.100
+cd /usr/local/spark/sbin/ &&  ./start-master.sh -h 10.211.55.100
 
 SCRIPT
 
@@ -185,7 +185,7 @@ $spark_slave_script = <<SCRIPT
 
 
 # Start Spark Master
-cd /usr/local/spark/sbin/ && ./start_slave.sh spark://10.211.55.100:7077
+cd /usr/local/spark/sbin/ && ./start-slave.sh spark://10.211.55.100:7077
 
 SCRIPT
 
