@@ -175,7 +175,7 @@ $spark_master_script = <<SCRIPT
 
 
 # Start Spark Master
-cd /usr/local/spark/sbin/ &&  ./start_master.sh -h 10.211.55.100
+cd /usr/local/spark/sbin/ && ls -l && ./start_master.sh -h 10.211.55.100
 
 SCRIPT
 
