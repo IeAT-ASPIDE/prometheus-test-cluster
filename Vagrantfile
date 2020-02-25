@@ -218,6 +218,7 @@ Vagrant.configure("2") do |config|
       v.name = "prometheus"
       v.customize ["modifyvm", :id, "--memory", "4096"]
     end
+    master.disksize.size = '20GB'
     master.vm.network :private_network, ip: "10.211.55.100"
     master.vm.hostname = "prometheus"
     master.vm.network :forwarded_port, host:9090, guest: 9090
