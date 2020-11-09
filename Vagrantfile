@@ -50,7 +50,14 @@ scrape_configs:
 EOF
 cd /opt/prometheus-2.13.0-rc.0.linux-amd64
 # Start prometheus
-nohup ./prometheus > prometheus.log 2>&1 &
+# nohup ./prometheus > prometheus.log 2>&1 &
+
+# Register node_exporter as service
+sudo mkdir /usr/lib/systemd/system
+sudo cp /vagrant/prometheus.service /usr/lib/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable prometheus.service
+sudo service prometheus.service start
 
 cd /opt
 
