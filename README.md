@@ -27,4 +27,6 @@ This is a vagrant based portable testbed cluster for prometheus
     * If during execution you get an error related to incompatibilities related to minor Pythin version
     make suer you have the correct PYSPARK_PYTHON env. var.  set.
         * export PYSPARK_PYTHON=/opt/conda/bin/python
+* Submitting Python based applications
+    * ./bin/spark-submit --master spark://<MASTER_IP>:7077 loc/of/file/pySparkPi.py 1000
 

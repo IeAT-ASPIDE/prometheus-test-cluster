@@ -176,7 +176,10 @@ ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 EOF
 SCRIPT
-
+#TODO add exports to bashrc:
+#
+#export PYSPARK_DRIVER_PYTHON=/usr/bin/ipython
+#export PYSPARK_PYTHON=/opt/conda/bin/python
 $spark_master_script = <<SCRIPT
 #!/bin/bash
 
