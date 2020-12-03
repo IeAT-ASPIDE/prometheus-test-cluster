@@ -6,10 +6,10 @@ Type=simple
 PIDFile=/run/prometheus.pid
 # Step 1 and Step 2 details are here..
 # ------------------------------------
-ExecStart=/opt/prometheus-2.13.0-rc.0.linux-amd64/prometheus/
+ExecStart=/opt/prometheus-2.13.0-rc.0.linux-amd64/prometheus
 User=ubuntu
 Group=ubuntu
-WorkingDirectory=/opt/prometheus-2.13.0-rc.0.linux-amd64/prometheus/
+WorkingDirectory=/opt/prometheus-2.13.0-rc.0.linux-amd64/
 Restart=always
 RestartSec=10
 #KillMode=mixed
