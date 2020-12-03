@@ -138,16 +138,17 @@ sudo service node_exporter start
 
 # Clone UNICAL Use-Case
 mkdir /opt/unical
-cd /opt/unical && git cone https://github.com/SCAlabUnical/AUDESOME.git
+sudo chown vagrant:vagrant -R /opt
+cd /opt/unical && git clone https://github.com/SCAlabUnical/AUDESOME.git
 
 # Install Chaos
 cd /opt && git clone https://github.com/IeAT-ASPIDE/ede-chaos-inductor.git
-systemctl enable redis-server.service
+sudo systemctl enable redis-server.service
 conda create -n chaos -y
 source activate chaos && pip install flask rq redis pyyaml flask-restful scipy flask-restful-swagger psutil py-cpuinfo pygrok
 cp /opt/ede-chaos-inductor/etc/systemd/chaosrqworker@.service /usr/lib/systemd/system
-systemctl enable chaosrqworker@.service
-systemctl daemon-reload
+sudo systemctl enable chaosrqworker@.service
+sudo systemctl daemon-reload
 
 #Set Swappiness value to 10 instead of 60
 sysctl -w vm.swappiness=10
@@ -225,7 +226,8 @@ Vagrant.configure("2") do |config|
     slave1.vm.box = "ubuntu/bionic64"
     slave1.vm.provider :virtualbox do |v|
       v.name = "unical_node1"
-      v.customize ["modifyvm", :id, "--memory", "4096"]
+      v.customize ["modifyvm", :id, "--memory", "8192"]
+      v.customize ["modifyvm", :id, "--cpus", 4]
     end
     slave1.vm.network :private_network, ip: "10.211.55.101"
     slave1.vm.hostname = "node1"
