@@ -132,7 +132,9 @@ sudo systemctl enable node_exporter.service
 sudo service node_exporter start  
 
 
-
+# Clone UNICAL Use-Case
+mkdir /opt/unical
+cd /opt/unical && git cone https://github.com/SCAlabUnical/AUDESOME.git
 
 
 #Set Swappiness value to 10 instead of 60
