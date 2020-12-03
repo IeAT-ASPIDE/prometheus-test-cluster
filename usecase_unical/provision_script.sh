@@ -55,21 +55,6 @@ wget -qO - http://d3kbcqa49mib13.cloudfront.net/spark-${APACHE_SPARK_VERSION}-bi
 cd /usr/local
 ln -s spark-${APACHE_SPARK_VERSION}-bin-hadoop2.7 spark
 
-# Scala Spark kernel (build and cleanup)
-
-#cd /tmp
-#echo 'deb http://dl.bintray.com/sbt/debian /' > /etc/apt/sources.list.d/sbt.list
-#apt-get update
-#apt-get install -yq --force-yes --no-install-recommends sbt
-##cd spark-kernel
-#sbt compile -Xms1024M -Xmx2048M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=1024M
-#sbt pack
-##mv kernel/target/pack /opt/sparkkernel
-##chmod +x /opt/sparkkernel
-#rm -rf ~/.ivy2
-#rm -rf ~/.sbt
-##rm -rf /tmp/spark-kernel
-#apt-get remove -y sbt
 
 apt-get clean
 # Spark env
@@ -78,26 +63,8 @@ export SPARK_HOME=/usr/local/spark
 export PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.4-src.zip
 
 # Install Python packages
-conda install --yes 'ipython' 'ipywidgets' 'pandas' 'matplotlib' 'scipy' 'seaborn' 'scikit-learn' 'pyspark' 'py4j' pyzmq
+conda install --yes 'ipython'
 conda clean -yt
-
-# Scala Spark and Pyspark kernels
-#mkdir -p /opt/conda/share/jupyter/kernels/scala
-#mkdir -p /opt/conda/share/jupyter/kernels/pyspark
-
-# cp /vagrant/kernels/scala.json /opt/conda/share/jupyter/kernels/scala/kernel.json
-# cp /vagrant/kernels/pyspark.json /opt/conda/share/jupyter/kernels/pyspark/kernel.json
-
-#Jupyter added in logon script rc.local (executed before login as root)
-# echo ' Setting up local rc path'
-
-# echo '#!/bin/sh -e' > /etc/rc.local
-# echo 'export CONDA_DIR=/opt/conda' >> /etc/rc.local
-# echo 'export PATH=$CONDA_DIR/bin:$PATH' >> /etc/rc.local
-# echo 'export SPARK_HOME=/usr/local/spark' >> /etc/rc.local
-# echo 'export PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.4-src.zip' >> /etc/rc.local
-# echo "jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --notebook-dir='/home/vagrant' & " >> /etc/rc.local
-# echo 'exit 0' >> /etc/rc.local
 
 # fix permisions
 chown -R vagrant:vagrant /opt/*

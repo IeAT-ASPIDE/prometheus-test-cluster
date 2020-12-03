@@ -22,11 +22,10 @@ $master_script = <<SCRIPT
 #!/bin/bash
 export LC_ALL="en_US.UTF-8"
 export LC_CTYPE="en_US.UTF-8"
-# add-apt-repository ppa:jonathonf/python-3.6 -y
 apt-get update
 apt-get install screen -y
-# apt-get install wget -y
-apt-get install python3-pip -y
+apt-get install wget -y
+apt-get install sbt
 
 sudo chown vagrant:vagrant -R /opt
 cd /opt
@@ -46,7 +45,7 @@ scrape_configs:
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
   - job_name: 'node-prometheus'
     static_configs:
-      - targets: ['10.211.55.101:9100', '10.211.55.102:9100', '10.211.55.103:9100']
+      - targets: ['10.211.55.101:9100']
 EOF
 cd /opt/prometheus-2.13.0-rc.0.linux-amd64
 # Start prometheus
@@ -75,20 +74,6 @@ sudo service grafana-server start
 # Run on every boot
 sudo update-rc.d grafana-server defaults
 
-# Install dependancies
-pip3 install numpy==1.16
-pip3 install scikit-learn==0.21.3
-pip3 install tpot
-pip3 install dask[complete]
-pip3 install dask distributed --upgrade
-pip3 install dask-ml[complete] 
-pip3 install dask-xgboost
-pip3 install bokeh
-
-
-
-# Start dask-schedueler
-nohup dask-scheduler --host 0.0.0.0 --port 8786 > dask_schedueler.log 2>&1 &
 
 # Set Swappiness value to 10 instead of 60
 sysctl -w vm.swappiness=10
@@ -113,7 +98,7 @@ export LC_CTYPE="en_US.UTF-8"
 apt-get update
 apt-get install wget -y
 apt-get install collectd -y
-apt-get install python3-pip -y
+apt-get install sbt -y
 
 sudo chown vagrant:vagrant -R /opt
 cd /opt
@@ -147,20 +132,8 @@ sudo systemctl enable node_exporter.service
 sudo service node_exporter start  
 
 
-# Install dependancies
-pip3 install numpy==1.16
-pip3 install scikit-learn==0.21.3
-pip3 install tpot
-pip3 install dask[complete]
-pip3 install dask distributed --upgrade
-pip3 install dask-ml[complete]
-pip3 install dask-xgboost 
-pip3 install bokeh
 
 
-
-# Start dask-worker
-nohup dask-worker 10.211.55.100:8786 > dask-worker.log 2>&1 &
 
 #Set Swappiness value to 10 instead of 60
 sysctl -w vm.swappiness=10
@@ -195,7 +168,7 @@ $spark_slave_script = <<SCRIPT
 
 
 # Start Spark Master
-cd /usr/local/spark/sbin/ && ./start-slave.sh spark://10.211.55.100:7077
+cd /usr/local/spark/sbin/ && ./start-slave.sh spark://10.211.55.101:7077
 
 SCRIPT
 
@@ -210,18 +183,6 @@ Vagrant.configure("2") do |config|
   config.hostmanager.manage_host = true
   config.hostmanager.include_offline = true
   config.hostmanager.ignore_private_ip = false
-
-  #Set same Username and Password
-  #config.ssh.username = "dice"
-  #config.ssh.password = "diceh2020"
-  
-  #Path to Private SSH key location
-  #config.ssh.private_key_path = "<path/to/key>"
-  
-  #SSH default host and port settings
-  #config.ssh.host ="<host>"
-  #config.ssh.port = "<port>"
-  
   
   config.vm.define :master do |master|
     master.vm.provider :virtualbox do |v|
@@ -243,7 +204,6 @@ Vagrant.configure("2") do |config|
     master.vm.network :forwarded_port, guest: 18080, host: 18080
     master.vm.provision :shell, :inline => $master_script
     master.vm.provision :shell, path: "provision_script.sh"
-    master.vm.provision :shell, :inline => $spark_master_script
     master.vm.provision :hostmanager
   end
 
@@ -262,6 +222,7 @@ Vagrant.configure("2") do |config|
     slave1.vm.network :forwarded_port, guest: 18080, host: 18081
     slave1.vm.provision :shell, :inline => $hosts_script
     slave1.vm.provision :shell, path: "provision_script.sh"
+    master.vm.provision :shell, :inline => $spark_master_script
     slave1.vm.provision :shell, :inline => $spark_slave_script
     slave1.vm.provision :hostmanager
   end
