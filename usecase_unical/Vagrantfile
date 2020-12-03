@@ -213,7 +213,6 @@ Vagrant.configure("2") do |config|
     master.vm.network :forwarded_port, guest: 7070, host: 7070
     master.vm.network :forwarded_port, guest: 4040, host: 4040
     master.vm.network :forwarded_port, guest: 18080, host: 18080
-    master.vm.provision :shell, :inline => $master_script
     master.vm.provision :shell, path: "provision_script.sh"
     master.vm.provision :hostmanager
   end
@@ -234,7 +233,7 @@ Vagrant.configure("2") do |config|
     slave1.vm.network :forwarded_port, guest: 18080, host: 18081
     slave1.vm.provision :shell, path: "provision_script.sh"
     slave1.vm.provision :shell, :inline => $hosts_script
-    master.vm.provision :shell, :inline => $spark_master_script
+    slave1.vm.provision :shell, :inline => $spark_master_script
     slave1.vm.provision :shell, :inline => $spark_slave_script
     slave1.vm.provision :hostmanager
   end
