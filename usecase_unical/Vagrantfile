@@ -56,7 +56,7 @@ sudo mkdir /usr/lib/systemd/system
 sudo cp /vagrant/prometheus.service /usr/lib/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable prometheus.service
-sudo service prometheus.service start
+sudo systemctl start prometheus.service
 
 cd /opt
 
@@ -149,6 +149,12 @@ source activate chaos && pip install flask rq redis pyyaml flask-restful scipy f
 cp /opt/ede-chaos-inductor/etc/systemd/chaosrqworker@.service /usr/lib/systemd/system
 sudo systemctl enable chaosrqworker@.service
 sudo systemctl daemon-reload
+
+cp /opt/ede-chaos-inductor/etc/systemd/eci@.service /usr/lib/systemd/system
+sudo systemctl enable eci@.service
+sudo systemctl daemon-reload
+sudo chown vagrant:vagrant -R /opt
+
 
 #Set Swappiness value to 10 instead of 60
 sysctl -w vm.swappiness=10
