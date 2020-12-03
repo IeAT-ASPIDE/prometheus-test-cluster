@@ -99,7 +99,10 @@ apt-get update
 apt-get install wget -y
 apt-get install collectd -y
 apt-get install redis-server -y
-apt-get install sbt -y
+echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
+sudo apt-get update
+sudo apt-get install sbt -y
 
 sudo chown vagrant:vagrant -R /opt
 cd /opt
