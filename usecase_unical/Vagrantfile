@@ -225,7 +225,7 @@ Vagrant.configure("2") do |config|
   
   config.vm.define :master do |master|
     master.vm.provider :virtualbox do |v|
-      v.name = "prometheus"
+      v.name = "prometheus_unical"
       v.customize ["modifyvm", :id, "--memory", "4096"]
     end
     master.disksize.size = '20GB'
@@ -250,7 +250,7 @@ Vagrant.configure("2") do |config|
   config.vm.define :slave1 do |slave1|
     slave1.vm.box = "ubuntu/bionic64"
     slave1.vm.provider :virtualbox do |v|
-      v.name = "node1"
+      v.name = "unical_node1"
       v.customize ["modifyvm", :id, "--memory", "4096"]
     end
     slave1.vm.network :private_network, ip: "10.211.55.101"
