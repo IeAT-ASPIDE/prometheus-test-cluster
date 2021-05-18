@@ -46,7 +46,7 @@ mkdir /root/.jupyter
 mkdir /root/.local
 
 # Spark dependencies
-export APACHE_SPARK_VERSION=2.1.1
+export APACHE_SPARK_VERSION=3.1.1 # formerly 2.1.1
 apt-get -y update
 apt-get install -y --no-install-recommends openjdk-7-jre-headless
 apt-get clean
@@ -100,4 +100,14 @@ cp /vagrant/kernels/pyspark.json /opt/conda/share/jupyter/kernels/pyspark/kernel
 # echo 'exit 0' >> /etc/rc.local
 
 # fix permisions
+
+cat  > /usr/local/spark/conf/metrics.properties <<EOF
+
+# Example configuration for PrometheusServlet
+*.sink.prometheusServlet.class=org.apache.spark.metrics.sink.PrometheusServlet
+*.sink.prometheusServlet.path=/metrics/prometheus
+master.sink.prometheusServlet.path=/metrics/master/prometheus
+applications.sink.prometheusServlet.path=/metrics/applications/prometheus
+EOF
+
 chown -R vagrant:vagrant /opt/*

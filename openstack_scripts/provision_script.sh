@@ -46,7 +46,7 @@ mkdir /root/.jupyter
 mkdir /root/.local
 
 # Spark dependencies
-export APACHE_SPARK_VERSION=2.1.1
+export APACHE_SPARK_VERSION=3.1.1 # formerly 2.1.1
 apt-get -y update
 apt-get install -y --no-install-recommends openjdk-7-jre-headless
 apt-get clean
@@ -78,7 +78,7 @@ export SPARK_HOME=/usr/local/spark
 export PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.4-src.zip
 
 # Install Python packages
-conda install --yes 'ipython' 'ipywidgets' 'pandas' 'matplotlib' 'scipy' 'seaborn' 'scikit-learn' 'pyspark' 'py4j' pyzmq
+conda install --yes 'ipython' 'ipywidgets' 'pandas' 'matplotlib' 'scipy' 'seaborn' 'scikit-learn' 'pyspark' 'py4j' 'pyzmq'
 conda clean -yt
 
 # Scala Spark and Pyspark kernels
@@ -98,6 +98,16 @@ cp /vagrant/kernels/pyspark.json /opt/conda/share/jupyter/kernels/pyspark/kernel
 # echo 'export PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.4-src.zip' >> /etc/rc.local
 # echo "jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --notebook-dir='/home/vagrant' & " >> /etc/rc.local
 # echo 'exit 0' >> /etc/rc.local
+
+# Configure metrics Prometheus sink
+cat  > /usr/local/spark/conf/metrics.properties <<EOF
+
+# Example configuration for PrometheusServlet
+*.sink.prometheusServlet.class=org.apache.spark.metrics.sink.PrometheusServlet
+*.sink.prometheusServlet.path=/metrics/prometheus
+master.sink.prometheusServlet.path=/metrics/master/prometheus
+applications.sink.prometheusServlet.path=/metrics/applications/prometheus
+EOF
 
 # fix permisions
 chown -R ubuntu:ubuntu /opt/*
