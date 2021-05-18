@@ -101,13 +101,8 @@ prompt-toolkit==1.0.15
 protobuf==3.6.1
 psutil==5.6.6
 ptyprocess==0.6.0
-<<<<<<< HEAD
 py==1.10.0
-Pygments==2.2.0
-=======
-py==1.8.0
 Pygments==2.7.4
->>>>>>> f12bcbfc9bb1b02da2fa65ff947c965b9db7d21f
 pymongo==3.8.0
 pyparsing==2.2.1
 pyproj==2.2.1
