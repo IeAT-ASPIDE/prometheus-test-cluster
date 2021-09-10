@@ -24,7 +24,7 @@ This is a vagrant based portable testbed cluster for prometheus
 * To check log go to /usr/local/spark-3.1.1-bin-hadoop2.7/logs/
 * To run Spark Job
     * spark-submit --class org.apache.spark.examples.SparkPi --master spark://<MASTER_IP>:7077 /usr/local/spark/examples/jars/spark-examples_2.12-3.1.1.jar 100
-    * If during execution you get an error related to incompatibilities related to minor Pythin version
+    * If during execution you get an error related to incompatibilities related to minor Python version
     make suer you have the correct PYSPARK_PYTHON env. var.  set.
         * export PYSPARK_PYTHON=/opt/conda/bin/python
 * Submitting Python based applications
