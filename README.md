@@ -37,8 +37,12 @@ On some systems and certain situations Spark has issues with handling hostnames.
 executing distributed applications. The executors will be created but will exit immediately. Thus all jobs will be run on the
 local (master) machine. Simplest solution is to edit the /etc/hosts file:
 
-# Spark Cluster
+
 <IP_MASTER>  spark-master
+
 <IP_SLAVE_1> spark-slave-1
+
 <IP_SLAVE_2> spark-slave-2
+
 <IP_SLAVE_3> spark-slave-3
+
