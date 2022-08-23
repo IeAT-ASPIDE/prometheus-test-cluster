@@ -78,7 +78,7 @@ more-itertools==7.1.0
 msgpack==0.6.2
 multipledispatch==0.6.0
 munch==2.3.2
-nbconvert==5.4.0
+nbconvert==6.5.1
 nbformat==4.4.0
 networkx==2.2
 notebook>=6.4.1
