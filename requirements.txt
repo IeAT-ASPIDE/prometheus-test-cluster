@@ -12,7 +12,7 @@ backports.tempfile==1.0
 backports.weakref==1.0.post1
 bleach==3.3.0
 bokeh==1.3.4
-certifi==2018.8.24
+certifi==2022.12.7
 chardet==3.0.4
 Click==7.0
 click-plugins==1.1.1
